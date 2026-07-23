@@ -1,0 +1,15 @@
+# Ignore virtual environments in any subdirectory
+**/.venv/
+.venv/
+env/
+venv/
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Ignore OS system files
+.DS_Store
+Thumbs.db
