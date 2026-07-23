@@ -21,7 +21,7 @@ This repository provides the rigorous software baseline profiling that demonstra
 
 ## Key Findings & Results
 
-We profiled 6 representative message-passing GNN architectures using the **ZINC dataset**. We measured **Total Latency**, **NT Latency** (dense MLPs/linear layers), and **MP Latency** (neighborhood aggregation/scatter-gather).
+I profiled 6 representative message-passing GNN architectures using the **ZINC dataset**. I measured **Total Latency**, **NT Latency** (dense MLPs/linear layers), and **MP Latency** (neighborhood aggregation/scatter-gather).
 
 ### Bottleneck Ratio ($MP / NT$)
 The **Bottleneck Ratio** quantifies the computational burden of memory-bound routing versus FLOP-bound linear transformation:
@@ -35,21 +35,25 @@ $$\text{Bottleneck Ratio} = \frac{\text{Message Passing Latency (ms)}}{\text{Nod
 
 ### Summary Benchmark Tables (ZINC Dataset - Averaged over 500+ consecutive graphs)
 
-#### CPU Performance Baseline (Intel / Work Environment)
+#### CPU Performance Baseline (Intel Core Ultra 7)
 | Model | Avg. Nodes | Avg. Edges | Total Latency (ms) | NT Latency (ms) | MP Latency (ms) | Bottleneck Ratio |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **GIN** | 23.01 | 49.58 | **0.224 ms** | 0.121 ms | 0.103 ms | **0.860** |
+| **GIN-VN** | 23.01 | 49.58 | **0.217 ms** | 0.117 ms | 0.100 ms | **0.854** |
 | **GCN** | 23.01 | 49.58 | **0.507 ms** | 0.311 ms | 0.195 ms | **0.628** |
-| **DGN** | 23.01 | 49.58 | **0.529 ms** | 0.328 ms | 0.201 ms | **0.615** |
 | **GAT** | 23.01 | 49.58 | **0.806 ms** | 0.588 ms | 0.218 ms | **0.369** |
+| **PNA** | 23.01 | 49.58 | **1.009 ms** | 0.291 ms | 0.718 ms | **2.517** |
+| **DGN** | 23.01 | 49.58 | **0.529 ms** | 0.328 ms | 0.201 ms | **0.615** |
 
-#### NVIDIA GPU Performance Baseline (CUDA / Home Environment)
+#### GPU Performance Baseline (NVIDIA RTX 3050)
 | Model | Avg. Nodes | Avg. Edges | Total Latency (ms) | NT Latency (ms) | MP Latency (ms) | Bottleneck Ratio |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **GIN** | 23.01 | 49.58 | **1.160 ms** | 0.708 ms | 0.452 ms | **0.696** |
-| **DGN** | 23.01 | 49.58 | **1.939 ms** | 1.547 ms | 0.392 ms | **0.257** |
+| **GIN-VN** | 23.01 | 49.58 | **0.914 ms** | 0.547 ms | 0.367 ms | **0.690** |
 | **GCN** | 23.01 | 49.58 | **2.275 ms** | 1.793 ms | 0.483 ms | **0.281** |
 | **GAT** | 23.01 | 49.58 | **3.094 ms** | 2.616 ms | 0.478 ms | **0.188** |
+| **PNA** | 23.01 | 49.58 | **5.183 ms** | 1.337 ms | 3.846 ms | **3.082** |
+| **DGN** | 23.01 | 49.58 | **1.939 ms** | 1.547 ms | 0.392 ms | **0.257** |
 
 ### Architectural Takeaways
 * **The GPU Latency Paradox:** Notice that the NVIDIA GPU is **4x to 5x slower** in total latency than the CPU across all models! Because graph sizes are small, the GPU execution time is entirely dominated by CUDA kernel launch overheads and PCIe host-to-device memory transfers.
